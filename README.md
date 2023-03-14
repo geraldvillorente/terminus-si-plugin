@@ -1,71 +1,71 @@
-# Terminus PEG Test Plugin
+# Terminus Secure Integration Test Plugin
 
 [![Unsupported](https://img.shields.io/badge/Pantheon-Unsupported-yellow?logo=pantheon&color=FFDC28)](https://pantheon.io/docs/oss-support-levels#unsupported)
 
-Terminus plugin that allows for testing [Pantheon Enterprise Gateway (PEG)](https://pantheon.io/docs/pantheon-enterprise-gateway/) configurations.
+Terminus plugin that allows for testing [Pantheon Secure Integration (SI)](https://docs.pantheon.io/guides/secure-development/secure-integration/) configurations.
 
 Adds the following commands to Terminus:
 
-* `peg:constants:list` (alias: `pegs`) - outputs a list of all PEG constants configured for the site, along with the IP and port to which the PEG resolves.
-* `peg:showcerts` (alias: `ptcerts`) - runs an OpenSSL handshake to inspect the remote server certificates (can be used as a proxy for any kind of PEG test).
-* `peg:test:curl` (alias: `ptcurl`) - runs a test that determines whether cURL functionality is working as expected.
-* `peg:test:ldap` (alias: `ptldap`) - runs a test that determines whether LDAP functionality is working as expected.
-* `peg:test:smtp` (alias: `ptsmtp`) - runs a test that determines whether SMTP functionality is working as expected.
-* `peg:test:ssh` (alias: `ptssh`) - runs a test that determines whether SSH functionality is working as expected.
+* `si:constants:list` (alias: `silist`) - outputs a list of all SI constants configured for the site, along with the IP and port to which the SI resolves.
+* `si:showcerts` (alias: `sicerts`) - runs an OpenSSL handshake to inspect the remote server certificates (can be used as a proxy for any kind of SI test).
+* `si:test:curl` (alias: `sitcurl`) - runs a test that determines whether cURL functionality is working as expected.
+* `si:test:ldap` (alias: `sildap`) - runs a test that determines whether LDAP functionality is working as expected.
+* `si:test:smtp` (alias: `sismtp`) - runs a test that determines whether SMTP functionality is working as expected.
+* `si:test:ssh` (alias: `sissh`) - runs a test that determines whether SSH functionality is working as expected.
 
 ## Details
 
-**What does this plugin do?** This plugin was written to provide a baseline function check of some common PEG setups, verifying that requests are sent to `localhost:<PEG port>` and forwarded to the client's remote service. If the client's service is configured properly and is capable of replying, that reply will be displayed. If the client reports that their PEG is not working correctly, this plugin provides a way to troubleshoot whether there is a problem with the PEG setup itself or if the module configuration is incorrect (for example, if the client reports that they cannot send mail via the stunnel and yet the `peg:test:smtp` command indicates success, the problem is likely in the module configuration, not the PEG setup).
+**What does this plugin do?** This plugin was written to provide a baseline function check of some common SI setups, verifying that requests are sent to `localhost:<SI port>` and forwarded to the client's remote service. If the client's service is configured properly and is capable of replying, that reply will be displayed. If the client reports that their SI is not working correctly, this plugin provides a way to troubleshoot whether there is a problem with the SI setup itself or if the module configuration is incorrect (for example, if the client reports that they cannot send mail via the stunnel and yet the `si:test:smtp` command indicates success, the problem is likely in the module configuration, not the SI setup).
 
 **What doesn't this plugin do?** This plugin does not indicate whether a module or plugin is configured properly, nor does it guarantee that the client's server is set up properly.
 
-**Why might this plugin say that the PEG is not configured properly?**
+**Why might this plugin say that the SI is not configured properly?**
 
-There are a few reasons why this plugin may report that the PEG test failed:
+There are a few reasons why this plugin may report that the SI test failed:
 
 * The client's server has not yet been configured to allow Pantheon's F5 load balancer IPs.
 * The service running on the client's server has not yet been set up or is not responding for some reason.
-* The PEG has not yet been activated.
-* The PEG is pointing to the wrong IP and port, which could be because the client sent the wrong information or because the engineer set up the PEG incorrectly.
+* The SI has not yet been activated.
+* The SI is pointing to the wrong IP and port, which could be because the client sent the wrong information or because the engineer set up the SI incorrectly.
 
 This plugin does not attempt to diagnose _why_ a connection failed; it only reports if it _did_.
 
 ## Usage
 
-### `peg:constants:list`
+### `si:constants:list`
 
-Example command: `terminus peg:constants:list my-site.dev`
+Example command: `terminus si:constants:list my-site.dev`
 
-This command simply checks which PEG constants are configured for a given environment. The output will indicate the PHP constant name to use, as well as the destination IP and port that the customer requested when setting up the PEG. **NOTE**: the port listed is the DESTINATION port, not the SOURCE port.
+This command simply checks which SI constants are configured for a given environment. The output will indicate the PHP constant name to use, as well as the destination IP and port that the customer requested when setting up the SI. **NOTE**: the port listed is the DESTINATION port, not the SOURCE port.
 
-### `peg:showcerts`
+### `si:showcerts`
 
-Example command: `terminus peg:showcerts my-site.dev --constant-name=PANTHEON_SOIP_CONSTANT_NAME`
-
-Options:
-
-| Option          | Description                                                         |
-|-----------------|---------------------------------------------------------------------|
-| --constant-name | The name of the constant to use. Must start with `PANTHEON_SOIP_`.  |
-
-This command runs an OpenSSL command on the remote server which performs an SSL handshake and returns the certificates from the remote server. This command can be used as a very basic check on whether or not the appserver is communicating with the remote service. This command may still fail, even if the PEG is set up properly, depending on the client's server configuration, but it is a good first pass to determine if the PEG is functioning properly. The output will be the complete output from the `openssl` command.
-
-### `peg:test:curl`
-
-Example command: `terminus peg:test:curl my-site.dev --constant-name=PANTHEON_SOIP_CONSTANT_NAME --url=http://www.example.com/test.json`
+Example command: `terminus si:showcerts my-site.dev --constant-name=PANTHEON_SOIP_CONSTANT_NAME`
 
 Options:
 
 | Option          | Description                                                         |
 |-----------------|---------------------------------------------------------------------|
 | --constant-name | The name of the constant to use. Must start with `PANTHEON_SOIP_`.  |
-| --url           | The URL to retrieve via the PEG.                                    |
+
+This command runs an OpenSSL command on the remote server which performs an SSL handshake and returns the certificates from the remote server. This command can be used as a very basic check on whether or not the appserver is communicating with the remote service. This command may still fail, even if the SI is set up properly, depending on the client's server configuration, but it is a good first pass to determine if the SI is functioning properly. The output will be the complete output from the `openssl` command.
+
+### `si:test:curl`
+
+Example command: `terminus si:test:curl my-site.dev --constant-name=PANTHEON_SOIP_CONSTANT_NAME --url=http://www.example.com/test.json`
+
+Options:
+
+| Option          | Description                                                         |
+|-----------------|---------------------------------------------------------------------|
+| --constant-name | The name of the constant to use. Must start with `PANTHEON_SOIP_`.  |
+| --url           | The URL to retrieve via the SI.                                    |
 
 This command uses cURL to assess whether basic cURL communication is working between the appserver and the client's remote service. Note that this test works for a variety of protocols, not just HTTP. Since PHP uses cURL as a backend for services like SOAP, and because many Drupal and WordPress modules/plugins use cURL for services like Apache Solr, this plugin can test a variety of scenarios where data is retrieved from a remote web server. The output from this command will indicate success or failure. For additional debugging information (which includes the content retrieved from the `--url` and the elapsed time of the test), use Terminus's `-vv` flag.
 
-### `peg:test:ldap`
+### `si:test:ldap`
 
-Example command: `terminus peg:test:ldap mysite.dev --constant-name=PANTHEON_SOIP_CONSTANT_NAME --use-tls=true --bind-dn="cn=admin,dc=example,dc=org" --bind-password`
+Example command: `terminus si:test:ldap mysite.dev --constant-name=PANTHEON_SOIP_CONSTANT_NAME --use-tls=true --bind-dn="cn=admin,dc=example,dc=org" --bind-password`
 
 Options:
 
@@ -80,9 +80,9 @@ Options:
 
 This command uses PHP's built-in [LDAP functions](http://php.net/manual/en/book.ldap.php) to communicate with a client's LDAP server and perform a basic binding. The output from this command will indicate success or failure. For additional debugging information (which includes a status message indicating the test parameters and results, and the elapsed time of the test), use Terminus's `-vv` flag.
 
-### `peg:test:smtp`
+### `si:test:smtp`
 
-Example command: `terminus peg:test:smtp my-site.dev --constant-name=PANTHEON_SOIP_CONSTANT_NAME --relay-address=client.smtp.server.com`
+Example command: `terminus si:test:smtp my-site.dev --constant-name=PANTHEON_SOIP_CONSTANT_NAME --relay-address=client.smtp.server.com`
 
 Options:
 
@@ -93,9 +93,9 @@ Options:
 
 This command uses web sockets to connect to the client's SMTP server and issue a `HELO` command to determine whether or not communication is flowing to the client's SMTP server. The output from this command will indicate success or failure. For additional debugging information (which includes the output from the `HELO` command and the elapsed time of the test), use Terminus's `-vv` flag.
 
-### `peg:test:ssh`
+### `si:test:ssh`
 
-Example command: `terminus peg:test:ssh my-site.dev --constant-name=PANTHEON_SOIP_CONSTANT_NAME
+Example command: `terminus SI:test:ssh my-site.dev --constant-name=PANTHEON_SOIP_CONSTANT_NAME
 
 Options:
 
@@ -110,9 +110,9 @@ For help installing, see [Manage Plugins](https://pantheon.io/docs/terminus/plug
 
 ```
 mkdir -p ~/.terminus/plugins
-composer create-project -d ~/.terminus/plugins pantheon-systems/terminus-pegtest-plugin:~1
+composer create-project -d ~/.terminus/plugins pantheon-systems/terminus-SItest-plugin:~1
 ```
 
 ## Help
 
-Run `terminus list peg` for a complete list of available commands. Use `terminus help <command>` to get help on any individual command.
+Run `terminus list si` for a complete list of available commands. Use `terminus help <command>` to get help on any individual command.
