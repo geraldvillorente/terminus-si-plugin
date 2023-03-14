@@ -1,11 +1,11 @@
 {
-    "name": "pantheon-systems/terminus-peg-test-plugin",
-    "description": "PEG Test - A Terminus plugin to test Pantheon Enterprise Gateway functionality.",
+    "name": "geraldvillorente/terminus-si-plugin",
+    "description": "SI Test - A Terminus plugin to test Pantheon Secure Integration functionality.",
     "type": "terminus-plugin",
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Pantheon\\TerminusPegTest\\": "src"
+            "Pantheon\\TerminusSITest\\": "src"
         }
     },
     "extra": {

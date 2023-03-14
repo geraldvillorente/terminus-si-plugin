@@ -1,13 +1,13 @@
 <?php
 
-namespace Pantheon\TerminusPegTest\Commands;
+namespace Pantheon\TerminusSITest\Commands;
 
 use Pantheon\Terminus\Exceptions\TerminusException;
 use Pantheon\Terminus\Commands\Remote\SSHBaseCommand;
 use Pantheon\Terminus\Exceptions\TerminusProcessException;
 use Consolidation\OutputFormatters\StructuredData\RowsOfFields;
 
-class PegCommand extends SSHBaseCommand
+class SICommand extends SSHBaseCommand
 {
     /**
      * @inheritdoc
@@ -78,12 +78,12 @@ class PegCommand extends SSHBaseCommand
     }
 
     /**
-     * Get a list of PEG constants.
+     * Get a list of SI constants.
      *
      * @authorize
      *
-     * @command peg:constants:list
-     * @aliases pegs
+     * @command si:constants:list
+     * @aliases silist
      *
      * @field-labels
      *     php_constant_name: Constant Name
@@ -108,17 +108,17 @@ class PegCommand extends SSHBaseCommand
 
             return new RowsOfFields($constants);
         } else {
-            $this->log()->notice('There are no PEG constants configured for this environment.');
+            $this->log()->notice('There are no SI constants configured for this environment.');
         }
     }
 
     /**
-     * Run a cURL test to ensure PEG setup for basic HTTP requests is working properly.
+     * Run a cURL test to ensure SI setup for basic HTTP requests is working properly.
      *
      * @authorize
      *
-     * @command peg:test:curl
-     * @aliases ptcurl
+     * @command si:test:curl
+     * @aliases sitcurl
      *
      * @param string $site_env_id Name of the environment to run the command on.
      * @option url The URL to use when running the cURL test.
@@ -143,7 +143,7 @@ class PegCommand extends SSHBaseCommand
         $results = $this->runTest($site_env_id, 'curltest.php', $options);
 
         if (!empty($results['results'])) {
-            $this->log()->success('cURL test completed successfully; PEG is configured properly.');
+            $this->log()->success('cURL test completed successfully; SI is configured properly.');
             $this->log()->info($results['results']);
             $this->log()->info('Elapsed time (sec): ' . $results['elapsed']);
         } else {
@@ -152,12 +152,12 @@ class PegCommand extends SSHBaseCommand
     }
 
     /**
-     * Run an LDAP test to ensure PEG setup for basic LDAP requests is working properly.
+     * Run an LDAP test to ensure SI setup for basic LDAP requests is working properly.
      *
      * @authorize
      *
-     * @command peg:test:ldap
-     * @aliases ptldap
+     * @command si:test:ldap
+     * @aliases sildap
      *
      * @param string $site_env_id Name of the environment to run the command on.
      * @option constant-name The constant name to use when running the cURL test
@@ -198,7 +198,7 @@ class PegCommand extends SSHBaseCommand
         $results = $this->runTest($site_env_id, 'ldaptest.php', $options);
 
         if (!empty($results['results'])) {
-            $this->log()->success('LDAP test completed succesfully; PEG is configured properly.');
+            $this->log()->success('LDAP test completed succesfully; SI is configured properly.');
             $this->log()->info($results['results']);
             $this->log()->info('Elapsed time (sec): ' . $results['elapsed']);
         } else {
@@ -207,12 +207,12 @@ class PegCommand extends SSHBaseCommand
     }
 
     /**
-     * Run an SMTP test to ensure PEG setup for SMTP requests is working properly.
+     * Run an SMTP test to ensure SI setup for SMTP requests is working properly.
      *
      * @authorize
      *
-     * @command peg:test:smtp
-     * @aliases ptsmtp
+     * @command si:test:smtp
+     * @aliases sismtp
      *
      * @param string $site_env_id Name of the environment to run the command on.
      * @option constant-name The constant name to use when running the cURL test.
@@ -237,7 +237,7 @@ class PegCommand extends SSHBaseCommand
         $results = $this->runTest($site_env_id, 'smtptest.php', $options);
 
         if (!empty($results['results'])) {
-            $this->log()->success('SMTP test completed successfully; PEG is configured properly.');
+            $this->log()->success('SMTP test completed successfully; SI is configured properly.');
             $this->log()->info($results['results']);
             $this->log()->info('Elapsed time (sec): ' . $results['elapsed']);
         } else {
@@ -250,8 +250,8 @@ class PegCommand extends SSHBaseCommand
      *
      * @authorize
      *
-     * @command peg:showcerts
-     * @aliases ptcerts
+     * @command si:showcerts
+     * @aliases sicerts
      *
      * @param string $site_env_id Name of the environment to run the command on.
      * @option constant-name The constant name to use when running the cURL test.
@@ -287,12 +287,12 @@ class PegCommand extends SSHBaseCommand
     }
 
     /**
-     * Run a simple SSH test to ensure PEG setup for basic SSH requests is working properly.
+     * Run a simple SSH test to ensure SI setup for basic SSH requests is working properly.
      *
      * @authorize
      *
-     * @command peg:test:ssh
-     * @aliases ptssh
+     * @command si:test:ssh
+     * @aliases sissh
      *
      * @param string $site_env_id Name of the environment to run the command on.
      * @option constant-name The constant name to use when running the cURL test.
@@ -310,7 +310,7 @@ class PegCommand extends SSHBaseCommand
         $results = $this->runTest($site_env_id, 'sshtest.php', $options);
 
         if (!empty($results['results'])) {
-            $this->log()->notice('Simple SSH test completed succesfully; PEG is configured properly.');
+            $this->log()->notice('Simple SSH test completed succesfully; SI is configured properly.');
             $this->log()->info($results['results']);
             $this->log()->info('Elapsed time (sec): ' . $results['elapsed']);
         } else {
