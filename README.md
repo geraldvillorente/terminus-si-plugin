@@ -110,7 +110,7 @@ For help installing, see [Manage Plugins](https://pantheon.io/docs/terminus/plug
 
 ```
 mkdir -p ~/.terminus/plugins
-composer create-project -d ~/.terminus/plugins geraldvillorente/terminus-si-plugin:~1
+composer create-project -d ~/.terminus/plugins geraldvillorente/terminus-si-plugin:dev-master
 ```
 
 ## Help
