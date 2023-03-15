@@ -113,6 +113,12 @@ mkdir -p ~/.terminus/plugins
 composer create-project -d ~/.terminus/plugins geraldvillorente/terminus-si-plugin:dev-master
 ```
 
+For Terminus 3:
+
+```
+terminus self:plugin:install geraldvillorente/terminus-si-plugin
+```
+
 ## Help
 
 Run `terminus list si` for a complete list of available commands. Use `terminus help <command>` to get help on any individual command.
